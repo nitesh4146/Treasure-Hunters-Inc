@@ -1,17 +1,20 @@
 import time
-from Tkinter import *
-from tkFileDialog import askopenfilename
-import Image
-import ImageTk
+from tkinter import *
+from tkinter.filedialog import askopenfilename
+from tkinter import simpledialog, messagebox
+# import Imagepip i
+from PIL import Image
+from PIL import ImageTk
+# import ImageTk
 import numpy as np
-import tkMessageBox
-import tkSimpleDialog
+# import messagebox
+# import tkSimpleDialog
 import os
 
 master = Tk()
 master.wm_title("                                           My Grid World")
 
-result = tkMessageBox.askyesno("Welcome to Grid World","Do you want to create a new map?")
+result = messagebox.askyesno("Welcome to Grid World","Do you want to create a new map?")
 
 grid = []
 path = os.getcwd() + "/images/"
@@ -27,7 +30,7 @@ if not result:
     filename = askopenfilename(title = "Select map file")
     print(filename)
     if len(filename) == 0:
-        tkMessageBox.showwarning('Error', 'No map selected!')
+        messagebox.showwarning('Error', 'No map selected!')
         quit()
     ins = open(filename, "r")
     for line in ins:
@@ -37,17 +40,17 @@ if not result:
     (x, y) = (len(grid[0]), len(grid))
     board = Canvas(master, width=x*Width, height=y*Width)
 else:
-    x_str = tkSimpleDialog.askstring('Size', 'Enter grid size')
+    x_str = simpledialog.askstring('Size', 'Enter grid size')
     if x_str == None:
-        tkMessageBox.showwarning('Error', 'No size found!')
+        messagebox.showwarning('Error', 'No size found!')
         quit()
     x = int(x_str)
     (x, y) = (x, x)
     path = os.getcwd() + "/images/"
-    wall_pic = ImageTk.PhotoImage(file=path+'wall.png')
-    diamond_pic = ImageTk.PhotoImage(file=path+'diamond.png')
-    fire_pic = ImageTk.PhotoImage(file=path+'fire.png')
-    robot_pic = ImageTk.PhotoImage(file=path+'robot.png')
+    wall_pic = ImageTk.PhotoImage(image= Image.open(path+'wall.png'))
+    diamond_pic = ImageTk.PhotoImage(image= Image.open(path+'diamond.png'))
+    fire_pic = ImageTk.PhotoImage(image= Image.open(path+'monster.png'))
+    robot_pic = ImageTk.PhotoImage(image= Image.open(path+'robot.png'))
 
     board = Canvas(master, width=x*Width, height=y*Width)
     start_count = 0
@@ -70,7 +73,7 @@ else:
     robot = 0
     def create_item(event):
         global robot, start_count, goal_count
-        x, y = event.x/75, event.y/75
+        x, y = int(event.x/75), int(event.y/75)
         if item_grid[y][x] == 0:
             if var.get() == "walls":
                 item_grid[y][x] = board.create_image(x*Width+35, y*Width+35, image=wall_pic)
@@ -92,7 +95,7 @@ else:
 
     def delete_item(event):
         global start_count, goal_count
-        x, y = event.x/75, event.y/75
+        x, y = int(event.x/75), int(event.y/75)
         if item_grid[y][x] != 0:
             board.delete(item_grid[y][x])
             item_grid[y][x] = 0
@@ -109,13 +112,13 @@ else:
     board = Canvas(master, width=x*Width, height=y*Width)
 
     if start_count < 1:
-        tkMessageBox.showwarning('Error', 'No start found!')
+        messagebox.showwarning('Error', 'No start found!')
         quit()
     elif goal_count <1:
-        tkMessageBox.showwarning('Error', 'No goal found!')
+        messagebox.showwarning('Error', 'No goal found!')
         quit()
 
-print (x, y)
+print(x, y)
 walls = []
 start = ()
 specials = []
@@ -142,10 +145,10 @@ flag = True
 restart = False
 
 path = os.getcwd() + "/images/"
-wall_pic = ImageTk.PhotoImage(file=path+'wall.png')
-diamond_pic = ImageTk.PhotoImage(file=path+'diamond.png')
-fire_pic = ImageTk.PhotoImage(file=path+'fire.png')
-robot_pic = ImageTk.PhotoImage(file=path+'robot.png')
+wall_pic = ImageTk.PhotoImage(image = Image.open(path+'wall.png'))
+diamond_pic = ImageTk.PhotoImage(image = Image.open(path+'diamond.png'))
+fire_pic = ImageTk.PhotoImage(image =  Image.open(path+'monster.png'))
+robot_pic = ImageTk.PhotoImage(image =  Image.open(path+'robot.png'))
 
 
 def create_triangle(i, j, action):
@@ -196,8 +199,6 @@ def visualize_grid():
         # board.create_rectangle(i*Width, j*Width, (i+1)*Width, (j+1)*Width, fill="black", width=1)
         board.create_image(i*Width+35, j*Width+35, image=wall_pic)
 
-visualize_grid()
-
 
 def set_color(state, action, val):
     global cell_score_min, cell_score_max
@@ -232,33 +233,8 @@ def restart_game():
     board.coords(robot, start[0]*Width+35, start[1]*Width+35)
 
 
-def showExpand(expanded_list, fgh_dict):
-    expanded_list = expanded_list[1:]
-    for e in expanded_list:
-        board.create_rectangle(e[0]*Width, e[1]*Width, (e[0]+1)*Width, (e[1]+1)*Width, fill="yellow")
-        board.create_text((e[0]+0.5)*Width, e[1]*Width+text_offset, text='f=' + str(format(fgh_dict[e]['f'], '.1f')), fill="black")
-        board.create_text((e[0]+0.5)*Width, e[1]*Width+text_offset+20, text='g=' + str(fgh_dict[e]['g']), fill="black")
-        board.create_text((e[0]+0.5)*Width, e[1]*Width+text_offset+40, text='h=' + str(format(fgh_dict[e]['h'], '.1f')), fill="black")
-        # board.coords(robot, start[0]*Width+35, start[1]*Width+35)
-        time.sleep((w1.get() + 0.1)/ 100)
-
-    for (i, j, c, w) in specials:
-        if w == -1:
-            board.create_image(i*Width+35, j*Width+35, image=fire_pic)
-        else:
-            board.create_image(i*Width+35, j*Width+35, image=diamond_pic)
-
-
+visualize_grid()
 robot = board.create_image(start[0]*Width+35, start[1]*Width+35, image=robot_pic)
-
-def move():
-    global robot
-    board.delete(robot)
-    robot = board.create_image(player[0]*Width+35, player[1]*Width+35, image=robot_pic)
-
-def noPath():
-    nopath = Label(master, text="Opps! NO PATH EXISTS", fg="red", bg="yellow", font = "Verdana 14 bold")
-    nopath.pack(side=BOTTOM)
 
 board.pack(side=LEFT)
 ################# Control widgets ##################
@@ -276,7 +252,6 @@ def printName(event):
 b1.bind("<Button-1>", printName)
 b1.pack()
 
-
 #   Sliders for speed and Epsilon
 q3frame = Frame(master)
 q3frame.pack()
@@ -284,25 +259,26 @@ w1 = Scale(q3frame, from_=0, to=50, orient=HORIZONTAL)
 w1.pack(side=LEFT)
 Label(text="Speed").pack()
 
+#   Path Planning
 # Label(text='\n').pack()
-separator = Frame(height=2, bd=1, relief=SUNKEN)
-separator.pack(fill=X, padx=2, pady=2)
+# separator = Frame(height=2, bd=1, relief=SUNKEN)
+# separator.pack(fill=X, padx=2, pady=2)
 
-Label(text="A Star\n",font = "Verdana 12 bold").pack()
-eu_or_mh = 'Manhattan'
-def toggle_h():
-    global eu_or_mh
-    if t_btn.config('text')[-1] == 'Euclidean Distance':
-        t_btn.config(text='Manhattan Distance')
-        eu_or_mh = 'Manhattan'
-        print eu_or_mh
-    else:
-        t_btn.config(text='Euclidean Distance')
-        eu_or_mh = 'Euclidean'
-        print eu_or_mh
+# Label(text="A Star\n",font = "Verdana 12 bold").pack()
+# eu_or_mh = 'Manhattan'
+# def toggle_h():
+#     global eu_or_mh
+#     if t_btn.config('text')[-1] == 'Euclidean Distance':
+#         t_btn.config(text='Manhattan Distance')
+#         eu_or_mh = 'Manhattan'
+#         print(eu_or_mh)
+#     else:
+#         t_btn.config(text='Euclidean Distance')
+#         eu_or_mh = 'Euclidean'
+#         print(eu_or_mh)
 
-t_btn = Button(text="Manhattan Distance", width=15, command=toggle_h)
-t_btn.pack(pady=3)
+# t_btn = Button(text="Manhattan Distance", width=15, command=toggle_h)
+# t_btn.pack(pady=3)
 
 ################# Q Learning widgets ##################
 # Label(text='\n').pack()
@@ -322,7 +298,7 @@ discount = 0.8
 def getDiscount(event):
     global discount
     discount = float(e.get())
-    print discount
+    print(discount)
 b3 = Button(qframe, text="Discount")
 b3.bind("<Button-1>", getDiscount)
 b3.pack(side=LEFT)
@@ -355,9 +331,8 @@ w2.pack()
 Label(text="Exploration (eps)").pack()
 
 
-
 def begin():
     global flag
     master.mainloop()
     flag = None
-    time.sleep(0.1)    # hold time for linked program to read flag and close
+    time.sleep(0.1)

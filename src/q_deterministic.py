@@ -19,9 +19,9 @@ current = World.start
 walls = World.walls
 goal = World.goal   #   (World.specials[1][0], World.specials[1][1])
 pit = World.pit #   [(World.specials[0][0], World.specials[0][1])]
-print "Goal: ", goal
-print "Pit: ", pit
-print "Walls: ", walls
+print("Goal: ", goal)
+print("Pit: ", pit)
+print("Walls: ", walls)
 
 Q = {}
 discount = World.discount
@@ -62,11 +62,11 @@ def init():
 def print_q():
     for state in states:
         if state == goal:
-            print "Goal ", state, " : ", Q[state]
+            print("Goal ", state, " : ", Q[state])
         elif state in pit:
-            print "Pit ", state, " : ", Q[state]
+            print("Pit ", state, " : ", Q[state])
         else:
-            print state, " : ", Q[state]
+            print(state, " : ", Q[state])
 
 
 def print_policy():
@@ -85,8 +85,8 @@ def print_policy():
         else:
             policy[a][b] = policy_sign[actions.index(act)]
             grid[a][b] = format(val, '.2f')
-    print np.array(grid)
-    print np.array(policy)
+    print(np.array(grid))
+    print(np.array(policy))
 
 
 def move(action):
@@ -108,10 +108,10 @@ def move(action):
         current = s
     elif current == goal:
         World.restart = True
-        print "**********************  Success score = ", score
+        print("**********************  Success score = ", score)
     elif current in pit:
         World.restart = True
-        print "**********************  Fail score = ", score
+        print("**********************  Fail score = ", score)
 
     World.move_bot(current[0], current[1])
     r = move_reward
@@ -135,7 +135,7 @@ def update_q(s, a, alpha, new_q):
     Q[s][a] *= (1 - alpha)
     Q[s][a] += (alpha * new_q)
     World.set_color(s, a, Q[s][a])
-    print Q[s][a]
+    print(Q[s][a])
 
 
 def soft_max(state, tou):
@@ -157,14 +157,14 @@ def random_action(act):
     for a in actions:
         if a !=act:
             other_actions.append(a)
-    print other_actions
+    print(other_actions)
     if r >= 1 - epsilon:
         r2 = random.randint(0, 2)
-        print "Random action:", other_actions[r2]
+        print("Random action:", other_actions[r2])
         return other_actions[r2]
 
     else:
-        print "Optimum action"
+        print("Optimum action")
         return act
 
 
@@ -180,25 +180,25 @@ def q_learn():
             continue
 
         (max_act, max_val) = max_q(current)
-        print "***********************************************************"
-        print "Current: ", current, max_q(current)
+        print("***********************************************************")
+        print("Current: ", current, max_q(current))
 
         (s, a, reward, s2) = move(random_action(max_act))
-        print "Move: ", (s, a, reward, s2)
+        print("Move: ", (s, a, reward, s2))
 
         (max_act2, max_val2) = max_q(s2)
-        print "Next: ", s2, max_q(s2)
-        print reward, "+", discount, "*", max_val2
+        print("Next: ", s2, max_q(s2))
+        print(reward, "+", discount, "*", max_val2)
         update_q(s, a, alpha, reward + discount*max_val2)
 
         print_q()
         # print_policy()
-        print "alpha (learning rate): ", alpha
+        print("alpha (learning rate): ", alpha)
         # raw_input()
 
         iter += 1
-        print "Iteration: ", iter
-        print "Epsilon: ", epsilon
+        print("Iteration: ", iter)
+        print("Epsilon: ", epsilon)
 
         if World.restart is True:
             current = World.start
@@ -212,7 +212,7 @@ def q_learn():
         epsilon = World.w2.get()
         # epsilon = soft_max(current, iter)
         discount = World.discount
-        print "Epsilon: ", epsilon
+        print("Epsilon: ", epsilon)
 
 
 t = threading.Thread(target=q_learn)
