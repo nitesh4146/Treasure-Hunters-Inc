@@ -1,9 +1,8 @@
-# Treasure Hunters Inc.
+# Treasure Hunters Inc. [![Python Version](https://img.shields.io/badge/Python-3.6+-blue.svg)](https://www.python.org/) 
 
-### We do the treasure hunting and monster fighting for you
+## We do the treasure hunting and monster fighting for you
 
 1. The map must be saved as a text file with the following format:
-
 
     0 0 0 0 3  
     0 1 1 0 4  
@@ -11,7 +10,7 @@
     0 0 0 0 0  
     2 0 0 0 0  
 
-    where, 1 is Wall, 2 is start, 3 is goal, 4 is pit or monster
+    where, 1 is Wall (or Obstacles), 2 is Agent, 3 is Treasure, 4 is Monster (or Pit)
 
 2. Terminal commands
 
@@ -19,10 +18,19 @@
 python3 q_deterministic.py
 python3 q_stochastic.py
 ```
+3. Features
+- Grid world GUI
+- Create new maps or load stored maps with dynamic grid size
+- Embedded controls to change the parameter values such as start point, exploration (eps), discount, and simulation speed
 
-### Reinforcement Learning
+<p align="center">
+<img src = "images/create.png"  alt="q_equation" >
+</p>
 
-#### Parameters
+
+### 1. Reinforcement Learning
+
+#### Q Learning Parameters
 <p align="center">
 <img src = "images/qfn.png"  alt="q_equation" >
 </p>
@@ -111,8 +119,8 @@ epsilon = World.w2.get()
 
 ### Demonstration:
 #### Heat Map
-<p align="center">
-<img src = "images/gradient.png"  alt="convergence" >
+<p align="left">
+<img src = "images/gradient.png"  alt="convergence" width=300 >
 </p>
 
 #### Deterministic Learning
@@ -167,3 +175,6 @@ reduced due to the transition model effect from neighboring states.
 
 [Q-learning in grid world](https://youtu.be/a_wkkZSHKzc)
 
+### References
+1. http://theory.stanford.edu/~amitp/GameProgramming/Heuristics.html#breaking-ties
+2. http://ai.berkeley.edu/lecture_videos.html

@@ -20,7 +20,7 @@ walls = World.walls
 goal = World.goal   #   (World.specials[1][0], World.specials[1][1])
 pit = World.pit #   [(World.specials[0][0], World.specials[0][1])]
 print("Goal: ", goal)
-print("Pit: ", pit)
+print("Monster: ", pit)
 print("Walls: ", walls)
 
 Q = {}
@@ -64,7 +64,7 @@ def print_q():
         if state == goal:
             print("Goal ", state, " : ", Q[state])
         elif state in pit:
-            print("Pit ", state, " : ", Q[state])
+            print("Monster ", state, " : ", Q[state])
         else:
             print(state, " : ", Q[state])
 
@@ -191,7 +191,7 @@ def random_action(act):
         print("Optimum action")
         return act
 
-
+# The Q value iteration function
 def q_learn():
     global alpha, discount, current, score, epsilon, discount, episodes
     iter = 1
@@ -202,12 +202,15 @@ def q_learn():
             quit()
         if World.flag is True:
             continue
-
+        
+        # Get action and value corresponding to maximum q value
         (max_act, max_val) = max_q(current)
         print("***********************************************************")
         print("Current: ", current, max_q(current))
 
         other_rew = 0
+
+        # Add Stochasticity in the optimal action
         max_act = random_action(max_act)
         for act in actions:
             if max_act != act:  # and actions[actions.index(max_act) - 2] != act:
@@ -215,22 +218,22 @@ def q_learn():
                 print(get_state(act), max_q(get_state(act)))
                 other_rew += (0.1 * (max_q(get_state(act)))[1])
 
+        # Take stochastic action
         (s, a, reward, s2) = move(random_action(max_act))
-        # (s, a, reward, s2) = move((max_act))
         print("Move: ", (s, a, reward, s2))
 
         (max_act2, max_val2) = max_q(s2)
         print("Next: ", s2, max_q(s2))
         print(reward, "+", discount, "* (0.8 *", max_val2, "+", other_rew, "+", 0.1*max_q(s)[1], ")")
 
-        # reward_s2 = reward + discount*(max_val2)
-        # reward_s2 = reward + discount*(0.7*max_val2 + other_rew)
+        # Calculate Reward with discount 
         reward_s2 = reward + discount*(0.6*max_val2 + other_rew + 0.1*max_q(s)[1])
         print(reward, "+", discount, "*", max_val2)
+
+        # Update q values
         update_q(s, a, alpha, reward_s2)
 
         print_q()
-        # print_policy()
         print("alpha (learning rate): ", alpha)
         # raw_input()     # Manual Control
 

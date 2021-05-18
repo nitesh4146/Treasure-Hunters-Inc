@@ -87,7 +87,7 @@ else:
                 item_grid[y][x] = board.create_image(x*Width+35, y*Width+35, image=diamond_pic)
                 grid[y][x] = 3
                 goal_count+=1
-            elif var.get() == "pit":
+            elif var.get() == "monster":
                 item_grid[y][x] = board.create_image(x*Width+35, y*Width+35, image=fire_pic)
                 grid[y][x] = 4
 

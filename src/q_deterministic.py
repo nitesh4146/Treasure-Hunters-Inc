@@ -20,7 +20,7 @@ walls = World.walls
 goal = World.goal   #   (World.specials[1][0], World.specials[1][1])
 pit = World.pit #   [(World.specials[0][0], World.specials[0][1])]
 print("Goal: ", goal)
-print("Pit: ", pit)
+print("Monster: ", pit)
 print("Walls: ", walls)
 
 Q = {}
@@ -41,7 +41,7 @@ steps = 300
 def init():
     for i in range(World.x):
         for j in range(World.y):
-            if (i, j) in walls:        # Obstacle
+            if (i, j) in walls: 
                 continue
             states.append((i, j))
 
@@ -64,7 +64,7 @@ def print_q():
         if state == goal:
             print("Goal ", state, " : ", Q[state])
         elif state in pit:
-            print("Pit ", state, " : ", Q[state])
+            print("Monster ", state, " : ", Q[state])
         else:
             print(state, " : ", Q[state])
 
@@ -167,7 +167,7 @@ def random_action(act):
         print("Optimum action")
         return act
 
-
+# The Q value iteration function
 def q_learn():
     global alpha, discount, current, score, epsilon, episodes
     iter = 1
@@ -179,16 +179,22 @@ def q_learn():
         if World.flag is True:
             continue
 
+        # Get action and value corresponding to maximum q value
         (max_act, max_val) = max_q(current)
         print("***********************************************************")
         print("Current: ", current, max_q(current))
 
+        # Take optimal action
         (s, a, reward, s2) = move(random_action(max_act))
         print("Move: ", (s, a, reward, s2))
 
         (max_act2, max_val2) = max_q(s2)
         print("Next: ", s2, max_q(s2))
+
+        # Final Reward with discount
         print(reward, "+", discount, "*", max_val2)
+
+        # Update q values
         update_q(s, a, alpha, reward + discount*max_val2)
 
         print_q()
