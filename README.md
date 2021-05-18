@@ -2,6 +2,9 @@
 
 ## We do the treasure hunting and monster fighting for you
 
+### Prerequisites
+1. `pip install -r requirements.txt`  
+`sudo apt-get install python3-pil python3-pil.imagetk`
 1. The map must be saved as a text file with the following format:
 
     0 0 0 0 3  
@@ -18,7 +21,7 @@
 python3 q_deterministic.py
 python3 q_stochastic.py
 ```
-3. Features
+### Features
 - Grid world GUI
 - Create new maps or load stored maps with dynamic grid size
 - Embedded controls to change the parameter values such as start point, exploration (eps), discount, and simulation speed
