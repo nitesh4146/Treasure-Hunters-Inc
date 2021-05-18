@@ -12,7 +12,7 @@ import numpy as np
 import os
 
 master = Tk()
-master.wm_title("                                           My Grid World")
+master.wm_title("Welcome to Treasure Hunters Inc.")
 
 result = messagebox.askyesno("Welcome to Grid World","Do you want to create a new map?")
 

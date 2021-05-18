@@ -5,11 +5,11 @@
 1. The map must be saved as a text file with the following format:
 
 
-    0 0 0 0 3
-    0 1 1 0 4
-    0 1 1 0 0
-    0 0 0 0 0
-    2 0 0 0 0
+    0 0 0 0 3  
+    0 1 1 0 4  
+    0 1 1 0 0  
+    0 0 0 0 0  
+    2 0 0 0 0  
 
     where, 1 is Wall, 2 is start, 3 is goal, 4 is pit or monster
 
@@ -97,14 +97,70 @@ direction of high reward action using the Q values encountered.
 <img src = "images/softmax.png"  alt="convergence" width=300>
 </p>
 
-<p align="center">
-<img src = "images/softmax_snp.png"  alt="convergence" >
-</p>
+In the current implementation, we have a function to get the current
+softmax value. However, by default it is disabled to give interactive control
+of epsilon value to the user in the GUI. In order to switch between softmax
+policy and manual control epsilon, use one of the following statement in the
+q_learn method.
+
+```python
+epsilon = World.w2.get()
+# epsilon = soft_max(current, iter)
+```
+
 
 ### Demonstration:
-#### Heat Maps
+#### Heat Map
 <p align="center">
 <img src = "images/gradient.png"  alt="convergence" >
+</p>
+
+#### Deterministic Learning
+![Deterministic Learning](./images/det.gif)
+#### Stochastic Learning
+![Deterministic Learning](./images/sto.gif)
+
+
+### Experiments
+- Example 1 
+
+Deterministic Learning  
+The robot goes through the shortest path to get more reward, even if it has
+a pit alongside that path. This is because the transition model is such that
+the robot will never land in the pit once it has learned the Q values.
+
+<p align="center">
+<img src = "images/detex1.png"  alt="convergence" width=600>
+</p>
+
+
+Stochastic Learning  
+We can see that for stochastic version of the above map, the robot chose a
+different path because the reward in the previous path (with pit) has been
+reduced due to the transition model effect from neighboring states.
+
+<p align="center">
+<img src = "images/stoex1.png"  alt="convergence" width=600>
+</p>
+
+- Example 2  
+
+Deterministic Learning 
+The robot goes through the shortest path to get more reward, even if it has
+a pit alongside that path. This is because the transition model is such that
+the robot will never land in the pit once it has learned the Q values.
+
+<p align="center">
+<img src = "images/detex2.png"  alt="convergence" width=600>
+</p>
+
+Stochastic Learning  
+We can see that for stochastic version of the above map, the robot chose a
+different path because the reward in the previous path (with pit) has been
+reduced due to the transition model effect from neighboring states.
+
+<p align="center">
+<img src = "images/stoex2.png"  alt="convergence" width=600>
 </p>
 
 ### YouTube Demos:
