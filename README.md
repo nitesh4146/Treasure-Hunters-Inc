@@ -28,13 +28,13 @@ python3 q_stochastic.py
 </p>
 
 1. R(s):
-For every action from current state, the robot gets an immediate walk/live
-reward of -0.05. This ensures that the robot doesn’t keeps on trying a bad
+For every action from current state, the agent gets an immediate walk/live
+reward of -0.05. This ensures that the agent doesn’t keeps on trying a bad
 action like hitting a wall continuously.
 
 
 2. Discount (γ) :
-This defines the portion of the next state reward that the robot gets for a
+This defines the portion of the next state reward that the agent gets for a
 given action. This value is 0.8 (i.e. 80%) for this implementation.
 
 
@@ -52,7 +52,7 @@ this implementation, probability of s’ from s by taking a is 0.6 while it is 0
 for the other three actions and 0.1 for staying at the same place.
 
 #### Convergence:
-The above equation gives a new Q value for a given action. When the robot
+The above equation gives a new Q value for a given action. When the agent
 is in the learning phase, a higher weight is given to the new Q values as
 compared to the previously learned Q value due to high uncertainty.
 However as the number of iteration increases, the weight of the newer Q
@@ -71,21 +71,21 @@ convergence of Q table.
 
 - The total number of episodes or iterations are limited to 10000 by default
 and can be changed in the program.
-- In each episode, the robot starts again after 300 steps.
+- In each episode, the agent starts again after 300 steps.
 
 
 #### Exploration:
 Epsilon - Probability of taking an action other than optimum action.
 Choice of actions:
 1. Always Greedy:
-When the value of epsilon is zero, the robot always takes an optimum
+When the value of epsilon is zero, the agent always takes an optimum
 action from current state. Thus the chances of staying in a local minima
 is high.
 
 2. Always Random:
-When the value of epsilon is one, the robot always takes an action which
+When the value of epsilon is one, the agent always takes an action which
 is not optimum. Although the Q table will be updated with the highest
-reward path, the robot will always keep on exploring without moving on
+reward path, the agent will always keep on exploring without moving on
 the highest reward path.
 
 3. Softmax Exploration (Simulated Annealing):
@@ -125,9 +125,9 @@ epsilon = World.w2.get()
 - Example 1 
 
 Deterministic Learning  
-The robot goes through the shortest path to get more reward, even if it has
-a pit alongside that path. This is because the transition model is such that
-the robot will never land in the pit once it has learned the Q values.
+The agent goes through the shortest path to get more reward, even if it has
+a monster along that path. This is because the transition model is such that
+the agent will never reach the monster once it has learned the Q values.
 
 <p align="center">
 <img src = "images/detex1.png"  alt="convergence" width=600>
@@ -135,8 +135,8 @@ the robot will never land in the pit once it has learned the Q values.
 
 
 Stochastic Learning  
-We can see that for stochastic version of the above map, the robot chose a
-different path because the reward in the previous path (with pit) has been
+We can see that for stochastic version of the above map, the agent chose a
+different path because the reward in the previous path (with monster) has been
 reduced due to the transition model effect from neighboring states.
 
 <p align="center">
@@ -146,25 +146,24 @@ reduced due to the transition model effect from neighboring states.
 - Example 2  
 
 Deterministic Learning 
-The robot goes through the shortest path to get more reward, even if it has
-a pit alongside that path. This is because the transition model is such that
-the robot will never land in the pit once it has learned the Q values.
+The agent goes through the shortest path to get more reward, even if it has
+a monster along that path. This is because the transition model is such that
+the agent will never reach the monster once it has learned the Q values.
 
 <p align="center">
 <img src = "images/detex2.png"  alt="convergence" width=600>
 </p>
 
 Stochastic Learning  
-We can see that for stochastic version of the above map, the robot chose a
-different path because the reward in the previous path (with pit) has been
+We can see that for stochastic version of the above map, the agent chose a
+different path because the reward in the previous path (with monster) has been
 reduced due to the transition model effect from neighboring states.
 
 <p align="center">
 <img src = "images/stoex2.png"  alt="convergence" width=600>
 </p>
 
-### YouTube Demos:
+### YouTube Demo:
 
-[Q-learning in grid world](https://www.youtube.com/watch?v=tJoS_Y2Aewc&list=PL8tmacGzZkmMs9Gts8CawJhJVqRIvwVQR&index=4)
+[Q-learning in grid world](https://youtu.be/a_wkkZSHKzc)
 
-[Interactive Grid World using Tkinter](https://www.youtube.com/watch?v=2RKE0LtrNh8&index=6&list=PL8tmacGzZkmMs9Gts8CawJhJVqRIvwVQR)

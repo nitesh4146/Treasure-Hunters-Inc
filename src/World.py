@@ -67,7 +67,7 @@ else:
     var = StringVar(master)
     var.set("Select item")
 
-    option = OptionMenu(master, var, "start", "walls", "goal", "pit")
+    option = OptionMenu(master, var, "start", "walls", "goal", "monster")
     option.pack()
 
     robot = 0
@@ -106,9 +106,10 @@ else:
                 goal_count-=1
 
     board.bind('<Button-3>', delete_item)
-    Label(text="Note: Please close \nthis window after finished.",font = "Verdana 12").pack(side=BOTTOM)
+    Label(text="Instructions: \n1. Select item from dropdown\n2.Left click on grid cell to add\n3. Right click on grid cell to remove\n\n\n\nNote: Please close \nthis window after finished.",font = "Verdana 12").pack(side=BOTTOM)
     master.mainloop()
     master = Tk()
+    master.wm_title("Welcome to Treasure Hunters Inc.")
     board = Canvas(master, width=x*Width, height=y*Width)
 
     if start_count < 1:
