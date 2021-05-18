@@ -10,15 +10,15 @@ import random
 #         [0, 0, 0, 0],
 #         [0, 0, 0, 0]]
 grid = World.grid
-actions = World.actions #   ["up", "left", "down", "right"]
+actions = World.actions  # ["up", "left", "down", "right"]
 policy_sign = ["^", "<", "v", ">"]
 states = []
 
 # start = World.start # (0, World.y - 1)
 current = World.start
 walls = World.walls
-goal = World.goal   #   (World.specials[1][0], World.specials[1][1])
-pit = World.pit #   [(World.specials[0][0], World.specials[0][1])]
+goal = World.goal  # (World.specials[1][0], World.specials[1][1])
+pit = World.pit  # [(World.specials[0][0], World.specials[0][1])]
 print("Goal: ", goal)
 print("Monster: ", pit)
 print("Walls: ", walls)
@@ -41,10 +41,9 @@ steps = 300
 def init():
     for i in range(World.x):
         for j in range(World.y):
-            if (i, j) in walls: 
+            if (i, j) in walls:
                 continue
             states.append((i, j))
-
 
     for state in states:
         temp = {}
@@ -155,7 +154,7 @@ def random_action(act):
     r = random.random()
     other_actions = []
     for a in actions:
-        if a !=act:
+        if a != act:
             other_actions.append(a)
     print(other_actions)
     if r >= 1 - epsilon:
@@ -168,6 +167,8 @@ def random_action(act):
         return act
 
 # The Q value iteration function
+
+
 def q_learn():
     global alpha, discount, current, score, epsilon, episodes
     iter = 1
@@ -214,7 +215,7 @@ def q_learn():
             alpha = pow(iter, -0.1)
             score = 1
 
-        time.sleep((World.w1.get() + 0.1)/ 100)
+        time.sleep((World.w1.get() + 0.1) / 100)
         epsilon = World.w2.get()
         # epsilon = soft_max(current, iter)
         discount = World.discount

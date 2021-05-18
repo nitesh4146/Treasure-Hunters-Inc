@@ -10,15 +10,15 @@ import random
 #         [0, 0, 0, 0],
 #         [0, 0, 0, 0]]
 grid = World.grid
-actions = World.actions #   ["up", "left", "down", "right"]
+actions = World.actions  # ["up", "left", "down", "right"]
 policy_sign = ["^", "<", "v", ">"]
 states = []
 
-start = World.start # (0, World.y - 1)
+start = World.start  # (0, World.y - 1)
 current = start
 walls = World.walls
-goal = World.goal   #   (World.specials[1][0], World.specials[1][1])
-pit = World.pit #   [(World.specials[0][0], World.specials[0][1])]
+goal = World.goal  # (World.specials[1][0], World.specials[1][1])
+pit = World.pit  # [(World.specials[0][0], World.specials[0][1])]
 print("Goal: ", goal)
 print("Monster: ", pit)
 print("Walls: ", walls)
@@ -44,7 +44,6 @@ def init():
             if (i, j) in walls:        # Obstacle
                 continue
             states.append((i, j))
-
 
     for state in states:
         temp = {}
@@ -120,7 +119,7 @@ def move(action):
 
     World.move_bot(current[0], current[1])
     # (act, val) = max_q(s)
-    r = move_reward #+ val
+    r = move_reward  # + val
 
     score += r
     s2 = current
@@ -179,7 +178,7 @@ def random_action(act):
     r = random.random()
     other_actions = []
     for a in actions:
-        if a !=act:
+        if a != act:
             other_actions.append(a)
     print(other_actions)
     if r >= 1 - epsilon:
@@ -192,6 +191,8 @@ def random_action(act):
         return act
 
 # The Q value iteration function
+
+
 def q_learn():
     global alpha, discount, current, score, epsilon, discount, episodes
     iter = 1
@@ -202,7 +203,7 @@ def q_learn():
             quit()
         if World.flag is True:
             continue
-        
+
         # Get action and value corresponding to maximum q value
         (max_act, max_val) = max_q(current)
         print("***********************************************************")
@@ -213,7 +214,8 @@ def q_learn():
         # Add Stochasticity in the optimal action
         max_act = random_action(max_act)
         for act in actions:
-            if max_act != act:  # and actions[actions.index(max_act) - 2] != act:
+            # and actions[actions.index(max_act) - 2] != act:
+            if max_act != act:
                 print(act)
                 print(get_state(act), max_q(get_state(act)))
                 other_rew += (0.1 * (max_q(get_state(act)))[1])
@@ -224,10 +226,12 @@ def q_learn():
 
         (max_act2, max_val2) = max_q(s2)
         print("Next: ", s2, max_q(s2))
-        print(reward, "+", discount, "* (0.8 *", max_val2, "+", other_rew, "+", 0.1*max_q(s)[1], ")")
+        print(reward, "+", discount, "* (0.8 *", max_val2,
+              "+", other_rew, "+", 0.1*max_q(s)[1], ")")
 
-        # Calculate Reward with discount 
-        reward_s2 = reward + discount*(0.6*max_val2 + other_rew + 0.1*max_q(s)[1])
+        # Calculate Reward with discount
+        reward_s2 = reward + discount * \
+            (0.6*max_val2 + other_rew + 0.1*max_q(s)[1])
         print(reward, "+", discount, "*", max_val2)
 
         # Update q values
@@ -248,7 +252,7 @@ def q_learn():
             alpha = pow(iter, -0.1)
             score = 1
 
-        time.sleep((World.w1.get() + 0.1)/ 100)
+        time.sleep((World.w1.get() + 0.1) / 100)
         epsilon = World.w2.get()
         # epsilon = soft_max(current, iter)
         discount = World.discount
