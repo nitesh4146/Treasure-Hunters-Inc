@@ -4,7 +4,6 @@ from tkinter.filedialog import askopenfilename
 from tkinter import simpledialog, messagebox
 from PIL import Image
 from PIL import ImageTk
-import numpy as np
 import os
 
 master = Tk()
@@ -22,6 +21,7 @@ cell_score_min = -0.2
 cell_score_max = 0.2
 Width = 70
 actions = ["up", "left", "down", "right"]
+print_states = False
 
 if not result:
     filename = askopenfilename(title="Select map file")
@@ -81,7 +81,6 @@ else:
             elif var.get() == "start":
                 item_grid[y][x] = board.create_image(
                     x*Width+35, y*Width+35, image=robot_pic)
-                # item_grid[y][x] = board.create_rectangle(x*Width+Width*4/10, y*Width+Width*4/10, x*Width+Width*6/10, y*Width+Width*6/10, fill="blue", width=1, tag="me")
                 grid[y][x] = 2
                 start_count += 1
             elif var.get() == "goal":
@@ -249,20 +248,20 @@ robot = board.create_image(
     start[0]*Width+35, start[1]*Width+35, image=robot_pic)
 
 board.pack(side=LEFT)
+
 ################# Control widgets ##################
 panel = Frame(master)
 panel.pack(side=RIGHT)
 Label(text="Controls\n", font="Verdana 12 bold").pack()
 
+# Play/Pause Toggle
 q1frame = Frame(master)
 q1frame.pack()
 b1 = Button(text="Play / Pause")
 
-
 def printName(event):
     global flag
     flag = not flag
-
 
 b1.bind("<Button-1>", printName)
 b1.pack()
@@ -311,7 +310,6 @@ e.insert(0, "0.8")
 
 discount = 0.8
 
-
 def getDiscount(event):
     global discount
     discount = float(e.get())
@@ -321,6 +319,7 @@ def getDiscount(event):
 b3 = Button(qframe, text="Discount")
 b3.bind("<Button-1>", getDiscount)
 b3.pack(side=LEFT)
+
 
 #  Change start panel
 q2frame = Frame(master)
@@ -332,7 +331,6 @@ def setStart(event):
     new_start = (int(x_entry.get()), int(y_entry.get()))
     if new_start not in walls:
         start = new_start
-
 
 b4 = Button(q2frame, text="Change Start")
 b4.bind("<Button-1>", setStart)
@@ -347,13 +345,32 @@ y_entry.insert(0, str(start[1]))
 b4.pack(side=LEFT)
 Label(text="").pack()
 
+
+# Exploration bar
 q4frame = Frame(master)
 q4frame.pack()
 w2 = Scale(q4frame, from_=0.0, to=0.9, orient=HORIZONTAL, resolution=0.1)
 w2.set(0.1)
 w2.pack()
 Label(text="Exploration (eps)").pack()
+Label(text="").pack()
 
+# Print states toggle
+q5frame = Frame(master)
+q5frame.pack()
+
+def printStates(event):
+    global print_states
+    
+    if print_states:
+        print_states = False
+    else:
+        print_states = True
+
+b5 = Button(q5frame, text="Toggle Print States")
+b5.bind("<Button-1>", printStates)
+b5.pack(side=LEFT)
+Label(text="").pack()
 
 def begin():
     global flag

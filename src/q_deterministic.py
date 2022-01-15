@@ -25,6 +25,8 @@ print("Walls: ", walls)
 
 Q = {}
 discount = World.discount
+print_states = World.print_states
+
 alpha = 1
 score = 1
 move_reward = -0.04
@@ -134,7 +136,7 @@ def update_q(s, a, alpha, new_q):
     Q[s][a] *= (1 - alpha)
     Q[s][a] += (alpha * new_q)
     World.set_color(s, a, Q[s][a])
-    print(Q[s][a])
+    print("Q(s) = (1-lr) * Q(s) + lr * Q'(s) = ", Q[s][a])
 
 
 def soft_max(state, tou):
@@ -163,18 +165,17 @@ def random_action(act):
         return other_actions[r2]
 
     else:
-        print("Optimum action")
+        print("Best action")
         return act
 
 # The Q value iteration function
-
-
 def q_learn():
-    global alpha, discount, current, score, epsilon, episodes
+    global alpha, discount, current, score, epsilon, episodes, print_states
+
     iter = 1
     init()
 
-    while iter != episodes:
+    while iter <= episodes:
         if World.flag is None:
             quit()
         if World.flag is True:
@@ -182,7 +183,7 @@ def q_learn():
 
         # Get action and value corresponding to maximum q value
         (max_act, max_val) = max_q(current)
-        print("***********************************************************")
+        print("*************************** %d ***************************"%(iter))
         print("Current: ", current, max_q(current))
 
         # Take optimal action
@@ -193,19 +194,19 @@ def q_learn():
         print("Next: ", s2, max_q(s2))
 
         # Final Reward with discount
-        print(reward, "+", discount, "*", max_val2)
+        print("Q'(s) = {} + {}*{}".format(reward, discount, max_val2))
 
         # Update q values
         update_q(s, a, alpha, reward + discount*max_val2)
 
-        print_q()
+        if print_states:
+            print_q()
+
         # print_policy()
-        print("alpha (learning rate): ", alpha)
+        print("learning rate: ", alpha)
         # raw_input()
 
         iter += 1
-        print("Iteration: ", iter)
-        print("Epsilon: ", epsilon)
 
         if World.restart is True:
             current = World.start
@@ -219,7 +220,10 @@ def q_learn():
         epsilon = World.w2.get()
         # epsilon = soft_max(current, iter)
         discount = World.discount
+        print_states = World.print_states
+
         print("Epsilon: ", epsilon)
+        print("Discount: ", discount)
 
 
 t = threading.Thread(target=q_learn)
